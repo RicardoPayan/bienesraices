@@ -64,30 +64,18 @@ if($_SERVER['REQUEST_METHOD']== 'POST'){
     $nombreImagen= md5(uniqid(rand(),true)).".jpg";
 
     //Subida de archivos
-    if ($_FILES['propiedad']['tmp_name']['imagen']){
-        $image = Image::make($_FILES['propiedad']['tmp_name']['imagen'])->fit(800,600);
-        $propiedad->setImagen($nombreImagen); //Al servidor solo le pasamos el nombre de la imagen
-
-    }
-    debuguear($propiedad);
-
-    if(empty($errores)){
 
 
-        exit();
-        //Si el arreglo de errores esta vacio entonces mandamos los datos a la base de datos
-        $query= "UPDATE propiedades SET titulo = '${titulo}', precio= '${precio}',imagen= '${nombreImagen}',descripcion= '${descripcion}', habitaciones= ${habitaciones},
-                    wc = ${wc}, estacionamiento = ${estacionamiento}, vendedorId=${vendedorId} WHERE id = ${id}";
-
-        /*echo $query;*/
-
-
-        $resultado= mysqli_query($db,$query); /*Indicandole que base de datos es y que valores le agregaremos*/
-
-        if($resultado){
-            //Redireccionar al usuario
-            header('Location: /admin?resultado=2');
+    if (empty($errores)) {
+        //save img
+        if ($_FILES['propiedad']['tmp_name']['imagen']) {
+            $nombreImagen = md5(uniqid(rand(), true)) . ".jpg";
+            $image = Image::make($_FILES['propiedad']['tmp_name']['imagen'])->fit(800, 600);
+            $propiedad->setImagen($nombreImagen);
+            $image->save(CARPETA_IMAGENES . $nombreImagen);
         }
+
+        $propiedad->guardar();
     }
 
 

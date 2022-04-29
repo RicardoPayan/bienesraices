@@ -4,13 +4,17 @@
     estaAutenticado();
 
     use App\Propiedad;
-
+    use App\Vendedor;
     //Implementar un metodo para obtener todas las propiedades
     $propiedades= Propiedad::all();
+    $vendedores= Vendedor::all();
+
+
 
 
     //Muestra mensaje condicional
     $resultado=$_GET['resultado'] ?? null;
+
 
     //Esto es para revisar que estamos enviando la informacion desde el formulario y que el request method sea post
     if($_SERVER['REQUEST_METHOD']== 'POST'){
@@ -22,24 +26,9 @@
             //Eliminar el archivo
 
             //Seleccionamos el id de la base de datos. id que mandamos desde el formulario
-            $query= "SELECT imagen FROM propiedades WHERE id=${id}";
+            $propiedad= Propiedad::find($id);
+            $propiedad->eliminar();
 
-            //Enviamos sentencia a la base de datos
-            $resultado=mysqli_query($db,$query);
-
-            //Enlazamos la informacion en propieda, guardandode los datos en la fila que obtuvimos de la base de datos
-            $propiedad=mysqli_fetch_assoc($resultado);
-
-            unlink('../imagenes/'.$propiedad['imagen']);
-
-
-            //Eliminar propieadad
-            $query = "DELETE FROM propiedades WHERE id = ${id}";
-
-            $resultado= mysqli_query($db,$query);
-            if($resultado){
-                header('location: /admin?resultado=3');
-            }
         }
     }
 

@@ -51,24 +51,9 @@ if($_SERVER['REQUEST_METHOD']== 'POST'){
     //Validar
     $errores=$propiedad->validar();
 
-
-    /*echo"<pre>";*/
-    /*var_dump($_POST);*/ /*POST es para leer informacion en los formularios sin que se guarde en la URL*/
-    /*echo "</pre>";*/
-
-   /* echo"<pre>";
-    var_dump($_FILES); /*Files es para arhcivos*/
-    /*echo "</pre>";*/
-
     //Con mysqli_real_escape_string validamos que la inforamacion puesta en el formulario sera correcta, que sean
     //numeros o strings segun sea necesario. Tambien evitamos lo que se conoce como inyeccion, una forma de joder nuestra
     //base de datos
-
-
-    /*echo"<pre>";
-    var_dump($errores);
-    echo "</pre>";*/
-
     //Revisar que el arreglo de erroes este vacio
     if(empty($errores)){
 
@@ -86,10 +71,8 @@ if($_SERVER['REQUEST_METHOD']== 'POST'){
 
 
         //GUARDA EN LA BASE DE DATOS
-        $resultado=$propiedad->guardar();
-        if($resultado){
-            header('Location:/admin?resultado=1');
-        }
+        $propiedad->guardar();
+
 
 
     }
