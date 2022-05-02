@@ -4,25 +4,20 @@
     require '../../includes/app.php';
 
     use App\Propiedad;
+    use App\Vendedor;
     use Intervention\Image\ImageManagerStatic as Image;
 
     estaAutenticado();
 
     //base datos
 
-    $db= conectarDB(); /*Llamamos la funcion que conecta con la base de datos*/
     $propiedad = new Propiedad;
 
-    //Consultar para obtener los vendedores
-    $consulta= "SELECT * FROM vendedores";
-    $resultadoVendedor = mysqli_query($db,$consulta);
+    //Consulta para obtener a los vendedores
+    $vendedores= Vendedor::all();
 
     //Arreglo con mensajes de errores
     $errores=Propiedad::getErrores();
-
-
-
-
 
     //ejecutar el codigo despues de que el usuario envia el formulario
 
@@ -69,18 +64,11 @@ if($_SERVER['REQUEST_METHOD']== 'POST'){
         //Subir la imagen
         $image->save(CARPETA_IMAGENES. $nombreImagen);
 
-
         //GUARDA EN LA BASE DE DATOS
         $propiedad->guardar();
-
-
-
     }
 
-
-
 }
-
     $inicio=true;
     incluirTemplate('header');
 ?>

@@ -1,5 +1,6 @@
 <?php
     use App\Propiedad;
+    use App\Vendedor;
     use Intervention\Image\ImageManagerStatic as Image;
     require '../../includes/app.php';
     estaAutenticado();
@@ -18,40 +19,15 @@
     //Obtener los datos de la propiedad
      /*Accedemos al id*/
     $propiedad= Propiedad::find($id);
-
-
-    //Consultar para obtener los vendedores
-    $consulta= "SELECT * FROM vendedores";
-    $resultadoVendedor = mysqli_query($db,$consulta);
+    $vendedores=Vendedor::all();
 
     //Arreglo con mensajes de errores
     $errores= Propiedad::getErrores();
 
-
     //En actualizar.php ya tenemos unos valores iniciales, que son los que estaban guardados antes
-
-
-
-
 //ejecutar el codigo despues de que el usuario envia el formulario
 
 if($_SERVER['REQUEST_METHOD']== 'POST'){
-
-
-    /*echo"<pre>";
-    var_dump($_POST); /*POST es para leer informacion en los formularios sin que se guarde en la URL*/
-    /*echo "</pre>";*/
-
-    /* echo"<pre>";
-     var_dump($_FILES); /*Files es para arhcivos*/
-    /*echo "</pre>";*/
-
-
-
-    //Con mysqli_real_escape_string validamos que la inforamacion puesta en el formulario sera correcta, que sean
-    //numeros o strings segun sea necesario. Tambien evitamos lo que se conoce como inyeccion, una forma de joder nuestra
-    //base de datos
-
 
     //Asignar los atributos
     $args=$_POST['propiedad'];

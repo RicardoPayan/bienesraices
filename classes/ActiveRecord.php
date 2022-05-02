@@ -87,6 +87,7 @@ class ActiveRecord
     public function eliminar(){
         $query = "DELETE FROM ". static::$tabla ." WHERE id = ". self::$db->escape_string($this->id). " LIMIT 1";
         $resultado= self::$db->query($query);
+
         if($resultado){
             $this->eliminarImagen();
             header('location: /admin?resultado=3');
@@ -97,7 +98,7 @@ class ActiveRecord
     //Funcion para identificar y unir los atributos de la DB
     public function atributos(){
         $atributos=[];
-        foreach (self::$columnas_DB as $columna){
+        foreach (static::$columnas_DB as $columna){
             if($columna=='id')continue;
             $atributos[$columna]=$this->$columna;
         }
@@ -139,48 +140,24 @@ class ActiveRecord
 
     //Validacion
     public static function getErrores(){
-        return self::$errores;
+        return static::$errores;
     }
 
     public function validar(){
         //VALIDACIONES
-        if(!$this->titulo){
-            self::$errores[]="Debes añadir un titulo";
-        }
-
-        if(!$this->precio){
-            self::$errores[]="El precio es obligatorio";
-        }
-
-        if(strlen($this->descripcion)<50){
-            self::$errores[]="La descripcion es obligatorio y debe tener al menos 50 caracteres";
-        }
-
-        if(!$this->habitaciones){
-            self::$errores[]="El numero de habitaciones es obligatorio";
-        }
-
-        if(!$this->wc){
-            self::$errores[]="El numero de baños es obligatorio";
-        }
-
-        if(!$this->estacionamiento){
-            self::$errores[]="El numero de estacionamientos es obligatorio";
-        }
-
-        if(!$this->vendedorId){
-            self::$errores[]="Seleccionar el vendedor es obligatorio";
-        }
-
-        if(!$this->imagen){
-            self::$errores[]='La imagen es obligatoria';
-        }
-
-        return self::$errores;
+        static::$errores=[];
+        return static::$errores;
     }
     //Lista todos los registros
     public static function all(){
         $query = "SELECT * FROM " . static::$tabla;
+        $resultado= self::consultarSQL($query);
+        return $resultado;
+    }
+
+    //Obtiene determinado numero de registros
+    public static function get($cantidad){
+        $query = "SELECT * FROM " . static::$tabla . " LIMIT " . $cantidad;
         $resultado= self::consultarSQL($query);
         return $resultado;
     }
@@ -202,7 +179,7 @@ class ActiveRecord
         //iterar los resultados
         $array = [];
         while($registro = $resultado->fetch_assoc()){
-            $array[]= self::crearObjeto($registro);
+            $array[]= static::crearObjeto($registro);
         }
 
 
